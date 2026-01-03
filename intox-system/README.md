@@ -22,3 +22,10 @@ A SillyTavern extension that tracks intoxication and arousal levels through rege
 ## Console Commands
 
 Access via browser console:
+javascript
+IntoxSystem.addDrinks(2) // Add drinks
+IntoxSystem.setArousal(5) // Set arousal
+IntoxSystem.slur("Hello") // Test slurring
+IntoxSystem.getInjection() // View prompt injection
+IntoxSystem.reset() // Reset all values
+
