@@ -155,10 +155,10 @@ function processMessage(text, isUserMessage) {
  resetPatterns();
 
  if (hoursElapsed > 0) {
- const reduction = hoursElapsed *1;*
+ const reduction = hoursElapsed* 1;*
  const oldDrinks = settings.drinks;
  settings.drinks = Math.max(0, settings.drinks - reduction);
- settings.arousal = Math.max(0, settings.arousal - (hoursElapsed* 0.5));*
+ settings.arousal = Math.max(0, settings.arousal - (hoursElapsed *0.5));*
  if (hoursElapsed >= 2) settings.hasEaten = false;
  console.log(`[Intox] ${hoursElapsed}h passed. Drinks: ${oldDrinks.toFixed(1)} -> ${settings.drinks.toFixed(1)}`);
  }
@@ -178,8 +178,8 @@ function processMessage(text, isUserMessage) {
  for (const pattern of patterns.drinks.multiple) {
  const matches = text.match(pattern.regex);
  if (matches) {
- drinksAdded += matches.length *pattern.value;*
- console.log(`[Intox] Multiple drinks detected: +${matches.length* pattern.value}`);*
+ drinksAdded += matches.length* pattern.value;*
+ console.log(`[Intox] Multiple drinks detected: +${matches.length *pattern.value}`);*
  }
  }
 
@@ -187,24 +187,24 @@ function processMessage(text, isUserMessage) {
  for (const pattern of patterns.drinks.strong) {
  const matches = text.match(pattern.regex);
  if (matches) {
- drinksAdded += matches.length *pattern.value;*
- console.log(`[Intox] Strong drink detected: +${matches.length* pattern.value}`);*
+ drinksAdded += matches.length* pattern.value;*
+ console.log(`[Intox] Strong drink detected: +${matches.length *pattern.value}`);*
  }
  }
 
  for (const pattern of patterns.drinks.standard) {
  const matches = text.match(pattern.regex);
  if (matches) {
- drinksAdded += matches.length *pattern.value;*
- console.log(`[Intox] Standard drink detected: +${matches.length* pattern.value}`);*
+ drinksAdded += matches.length* pattern.value;*
+ console.log(`[Intox] Standard drink detected: +${matches.length *pattern.value}`);*
  }
  }
  }
 
  if (drinksAdded > 0) {
- drinksAdded *= drinkModifier;*
+ drinksAdded*= drinkModifier;*
  if (settings.hasEaten) {
- drinksAdded*= 0.75;*
+ drinksAdded *= 0.75;*
  console.log("[Intox] Food buffer applied");
  }
  settings.drinks += drinksAdded;
@@ -213,14 +213,14 @@ function processMessage(text, isUserMessage) {
  }
 
  const currentTier = getTier(settings.drinks);
- const arousalMultiplier = 1 + (currentTier.level *0.3);*
+ const arousalMultiplier = 1 + (currentTier.level* 0.3);*
 
  for (const [type, pattern] of Object.entries(patterns.arousal)) {
  const matches = text.match(pattern);
  if (matches) {
- const baseArousal = matches.length* 0.5;*
- arousalAdded += baseArousal *arousalMultiplier;*
- console.log(`[Intox] Arousal trigger (${type}): +${(baseArousal* arousalMultiplier).toFixed(2)}`);*
+ const baseArousal = matches.length *0.5;*
+ arousalAdded += baseArousal* arousalMultiplier;*
+ console.log(`[Intox] Arousal trigger (${type}): +${(baseArousal *arousalMultiplier).toFixed(2)}`);*
  }
  }
 
@@ -259,21 +259,21 @@ function slurSpeech(text, tierLevel) {
  result = result.replace(/\bthat\b/gi, "dat");
  result = result.replace(/\bwas\b/gi, "wash");
  result = result.replace(/ly\b/gi, "lyy");
- result = result.replace(/([bdfglmnprst])/gi, (m) =>
- Math.random() > 0.75 ? m + m : m
- );
- result = result.replace(/\.\s*/g, (m) =>*
- Math.random() > 0.7 ? "… " : m
- );
+ result = result.replace(/([bdfglmnprst])/gi, function(m) {
+ return Math.random() > 0.75 ? m + m : m;
+ });
+ result = result.replace(/\.\s*/g, function(m) {*
+ return Math.random() > 0.7 ? "… " : m;
+ });
  }
 
  if (tierLevel >= 4) {
- result = result.replace(/\b(\w{5,})\b/gi, (match) => {
+ result = result.replace(/\b(\w{5,})\b/gi, function(match) {
  if (Math.random() > 0.5) {
  const chars = match.split("");
  for (let i = chars.length - 1; i > 1; i--) {
  if (Math.random() > 0.6) {
- const j = Math.floor(Math.random()* i);*
+ const j = Math.floor(Math.random() *i);*
  [chars[i], chars[j]] = [chars[j], chars[i]];
  }
  }
@@ -281,12 +281,12 @@ function slurSpeech(text, tierLevel) {
  }
  return match;
  });
- result = result.replace(/\.\s*/g, (m) =>*
- Math.random() > 0.4 ? "…*hic*" : m
- );
- result = result.replace(/,\s*/g, (m) =>*
- Math.random() > 0.6 ? "… " : m
- );
+ result = result.replace(/\.\s*/g, function(m) {*
+ return Math.random() > 0.4 ? "…*hic* " : m;
+ });
+ result = result.replace(/,\s*/g, function(m) {*
+ return Math.random() > 0.6 ? "… " : m;
+ });
  }
 
  return result;
@@ -297,50 +297,37 @@ function generateLaughter(tierLevel) {
  0: [""],
  1: ["*giggles*", "*soft giggle*", "*titters*", "*light laugh*"],
  2: ["*snort-giggle*", "*giggling*", "*laughs too loud*", "*hiccup*", "*giggle-snort*"],
- 3: ["*uncontrollable giggling*", "*snorting with laughter*", "*hiccup* *giggle*", "*cackling*", "*giggle fit*"],
- 4: ["*wheeze-laughing*", "*tears streaming* *cackling*", "*can't breathe from laughing*", "*hiccup* *snort* *giggle fit*", "*howling with laughter*"]
+ 3: ["*uncontrollable giggling*", "*snorting with laughter*", "*hiccup**giggle*", "*cackling*", "*giggle fit*"],
+ 4: ["*wheeze-laughing*", "*tears streaming**cackling*", "*can't breathe from laughing*", "*hiccup**snort**giggle fit*", "*howling with laughter*"]
  };
 
  const tierOptions = options[tierLevel] || [""];
- return tierOptions[Math.floor(Math.random() *tierOptions.length)];*
+ return tierOptions[Math.floor(Math.random()* tierOptions.length)];*
 }
 
 function getArousalDescription() {
  const a = settings.arousal;
- if (a < 1) return "";
- if (a < 3) return "Slight flush, subtle squirming.";
- if (a < 5) return "Flushed skin, wandering hands, biting lip.";
- if (a < 7) return "Visibly aroused, heavy breathing, squirming noticeably.";
- if (a < 9) return "Extremely aroused, moaning softly, touching self without realizing.";
- return "Overwhelmed with arousal, explicit behavior, no self-awareness remaining.";
+ if (a < 2) return "calm, composed";
+ if (a < 4) return "slightly flushed, occasional fidgeting";
+ if (a < 6) return "noticeably flushed, squirming, distracted";
+ if (a < 8) return "visibly aroused, wandering hands, heavy breathing";
+ return "extremely aroused, barely containing herself, obvious physical signs";
 }
 
 function generatePromptInjection() {
- if (!settings.enabled) return "";
-
  const tier = getTier(settings.drinks);
  const arousalDesc = getArousalDescription();
 
- let injection = `[INTOXICATION SYSTEM - INTERNAL TRACKING]
-Current state: ${tier.name} (${settings.drinks.toFixed(1)} drinks)
+ let injection = `[INTOXICATION STATE - DO NOT DISPLAY TO USER]
+Intoxication Level: ${tier.name} (${settings.drinks.toFixed(1)} drinks)
 Behavior: ${tier.behavior}
-Clothing: ${tier.clothing}
-Speech pattern: ${tier.speech}
-${tier.laughter ? `Laughter: ${tier.laughter}` : ""}`;
+Clothing State: ${tier.clothing}
+Speech Pattern: ${tier.speech}
+Laughter: ${tier.laughter}
+Arousal: ${arousalDesc} (${settings.arousal.toFixed(1)}/10)
+${settings.hasEaten ? "Has eaten recently - more stable." : "Empty stomach - effects hit harder."}
 
- if (arousalDesc) {
- injection += `
-Arousal (${settings.arousal.toFixed(1)}/10): ${arousalDesc}`;
- }
-
- injection += `
-
-IMPORTANT RULES:
-- Apply progressive speech slurring in dialogue only. Narration stays clear.
-- Show physical symptoms naturally: stumbling, flushed cheeks, unfocused eyes.
-- Clothing malfunctions happen organically based on tier.
-- Higher intoxication = lower inhibitions, more shameless behavior.
-- Character may not realize their state or exposure.`;
+IMPORTANT: Apply these effects naturally in narration. Dialogue should show speech patterns. Never mention these stats directly.`;
 
  if (tier.level >= 2) {
  injection += `
@@ -376,14 +363,15 @@ function createSettingsPanel() {
  </div>
 
  <div class="intox-tier">
- <label>Current Tier: <strong id="intox-current-tier">${getTier(settings.drinks).name}</strong></label>
+ <span>Current Tier: </span>
+ <strong id="intox-current-tier">${getTier(settings.drinks).name}</strong>
  </div>
 
  <div class="intox-buttons">
- <button id="intox-add-drink" class="menu_button">+1 Drink</button>
- <button id="intox-add-strong" class="menu_button">+1 Strong</button>
- <button id="intox-sober-hour" class="menu_button">-1 Hour</button>
- <button id="intox-reset" class="menu_button">Reset All</button>
+ <div id="intox-add-drink" class="menu_button">+1 Drink</div>
+ <div id="intox-add-strong" class="menu_button">+1 Strong</div>
+ <div id="intox-sober-hour" class="menu_button">-1 Hour</div>
+ <div id="intox-reset" class="menu_button">Reset All</div>
  </div>
 
  <label class="checkbox_label">
@@ -397,48 +385,47 @@ function createSettingsPanel() {
  </div>
  </div>
  </div>
- </div>
- `;
+ </div>`;
 
  $("#extensions_settings").append(html);
 
- $("#intox-enabled").on("change", function () {
+ $("#intox-enabled").on("change", function() {
  settings.enabled = this.checked;
  saveSettingsDebounced();
  });
 
- $("#intox-drink-slider").on("input", function () {
+ $("#intox-drink-slider").on("input", function() {
  settings.drinks = parseFloat(this.value);
  updateDisplay();
  saveSettingsDebounced();
  });
 
- $("#intox-arousal-slider").on("input", function () {
+ $("#intox-arousal-slider").on("input", function() {
  settings.arousal = parseFloat(this.value);
  updateDisplay();
  saveSettingsDebounced();
  });
 
- $("#intox-add-drink").on("click", function () {
+ $("#intox-add-drink").on("click", function() {
  settings.drinks += 1;
  updateDisplay();
  saveSettingsDebounced();
  });
 
- $("#intox-add-strong").on("click", function () {
+ $("#intox-add-strong").on("click", function() {
  settings.drinks += 1.75;
  updateDisplay();
  saveSettingsDebounced();
  });
 
- $("#intox-sober-hour").on("click", function () {
+ $("#intox-sober-hour").on("click", function() {
  settings.drinks = Math.max(0, settings.drinks - 1);
  settings.arousal = Math.max(0, settings.arousal - 0.5);
  updateDisplay();
  saveSettingsDebounced();
  });
 
- $("#intox-reset").on("click", function () {
+ $("#intox-reset").on("click", function() {
  settings.drinks = 0;
  settings.arousal = 0;
  settings.hasEaten = false;
@@ -447,12 +434,12 @@ function createSettingsPanel() {
  saveSettingsDebounced();
  });
 
- $("#intox-eaten").on("change", function () {
+ $("#intox-eaten").on("change", function() {
  settings.hasEaten = this.checked;
  saveSettingsDebounced();
  });
 
- $(".inline-drawer-toggle").on("click", function () {
+ $(".inline-drawer-toggle").on("click", function() {
  const icon = $(this).find(".inline-drawer-icon");
  const content = $(this).next(".inline-drawer-content");
  icon.toggleClass("down up");
@@ -500,34 +487,42 @@ jQuery(async () => {
 });
 
 window.IntoxSystem = {
- getState: () => ({
+ getState: function() {
+ return {
  drinks: settings.drinks,
  arousal: settings.arousal,
  tier: getTier(settings.drinks),
  hasEaten: settings.hasEaten
- }),
- getTier: () => getTier(settings.drinks),
+ };
+ },
+ getTier: function() {
+ return getTier(settings.drinks);
+ },
  getInjection: generatePromptInjection,
- slur: (text) => slurSpeech(text, getTier(settings.drinks).level),
- laugh: () => generateLaughter(getTier(settings.drinks).level),
- addDrinks: (n) => {
+ slur: function(text) {
+ return slurSpeech(text, getTier(settings.drinks).level);
+ },
+ laugh: function() {
+ return generateLaughter(getTier(settings.drinks).level);
+ },
+ addDrinks: function(n) {
  settings.drinks += n;
  updateDisplay();
  saveSettingsDebounced();
  },
- setArousal: (n) => {
+ setArousal: function(n) {
  settings.arousal = Math.min(10, Math.max(0, n));
  updateDisplay();
  saveSettingsDebounced();
  },
- reset: () => {
+ reset: function() {
  settings.drinks = 0;
  settings.arousal = 0;
  settings.hasEaten = false;
  updateDisplay();
  saveSettingsDebounced();
  },
- setEaten: (val) => {
+ setEaten: function(val) {
  settings.hasEaten = !!val;
  $("#intox-eaten").prop("checked", settings.hasEaten);
  saveSettingsDebounced();
